@@ -1,0 +1,62 @@
+Hacer como un visual en el terminal para saber con quien estas hablando y quien te ha hanlado iluminando con luz o marcarlo con un simbolo. 
+
+Crear un minijoc per als usuaris quant no hi ha ningu conectat - 
+
+Temporitzador  - avis de que el servidor estacara en 30segons. 
+
+S'ha de lliberar la memoria de la structura users al tancar el servidor. 
+
+//Server
+# ✅ Quant un client tanca la sessio mentre el server envia dades es tanca el server fent que tots els clients perdin conexio. ✅  Solucio: MSG_NOSIGNAL
+# Configurar que els usuaris puguin parla amb altres usuaris
+# 🔴Crear la part de la base de dades on es guarden totes les propietats de tots els usuaris .🔴
+    # Aquesta base de dades tambe ha de tenir un HEADER per saber que es tracta de una base de dades legitima. 
+# Reset the nfds variable to reuse the log off file descriptors from clients. This could make that another user gets a used file descriptor
+# Posar tots els missatges hardcodejats al common file. 
+# Crear logs del servidor, anotar tots els errors que pasen que no han tirat el server sig, autenticacions fallides tambe, 
+# Brute Force attempts
+# Funcio per imprimir tots els usuaris conectats online 
+# Fer que els usuaris siguin dinamics, amb realloc, 
+
+// Client 
+# Que el client es pugue quedar en espera asta que el servidor estigue disponible
+# Funcio per a registrar-te si no tens usuari
+# Definir el menu i el protocol de com funcionara el menu 
+# R
+# Funcionalitat per surtir del programa (exit)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║ 🔔 carlos te mencionó en grupo_trabajo | 2 mensajes perdidos             ║
+╠═══════════════╤═══════════════════════╤═══════════════════════════════════╣
+║ GENTE ONLINE  │ CHATS ACTIVOS         │ Chat con: maria (🟢 online)       ║
+║ 🔍[_______]   │                       │ ────────────────────────────────── ║
+║ ─────────────  │ ▸ maria ✉(3) 🔴     │ [14:32] maria: ¿Vamos al cine?✅  ║
+║🟢juan⌨️       │   carlos 👥✉(12)      │ [14:35] tú: ¡Perfecto! 📍        ║
+║🟡ana (5min)   │   luis ✅             │ [14:36] maria: 😊                 ║
+║🔴pedro        │   📌 familia 👥       │ maria está escribiendo... ⌨️       ║
+║⚫sofia (1h)   │                       │                                   ║
+║               │ [+] Nuevo chat        │ ┌───────────────────────────────┐ ║
+║ ───────────── │                       │ │ Responder...                  │ ║
+║ 👥 Grupos: 3  │                       │ └───────────────────────────────┘ ║
+║ 🔒 Privados:4 │                       │ [Tab] Cambiar | [F1] Ayuda       ║
+╚═══════════════╧═══════════════════════╧═══════════════════════════════════╝
