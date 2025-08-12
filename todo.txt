@@ -1,10 +1,4 @@
-Hacer como un visual en el terminal para saber con quien estas hablando y quien te ha hanlado iluminando con luz o marcarlo con un simbolo. 
 
-Crear un minijoc per als usuaris quant no hi ha ningu conectat - 
-
-Temporitzador  - avis de que el servidor estacara en 30segons. 
-
-S'ha de lliberar la memoria de la structura users al tancar el servidor. 
 
 //Server
 # ✅ Quant un client tanca la sessio mentre el server envia dades es tanca el server fent que tots els clients perdin conexio. ✅  Solucio: MSG_NOSIGNAL
@@ -26,6 +20,14 @@ S'ha de lliberar la memoria de la structura users al tancar el servidor.
 # Funcionalitat per surtir del programa (exit)
 
 
+// General 
+
+🔴Funcio per encriptar les contrasenyes y el usuaris de la base de dades. 
+Un usuari administrador per gestionar el serivor. 
+Hacer como un visual en el terminal para saber con quien estas hablando y quien te ha hanlado iluminando con luz o marcarlo con un simbolo. 
+Crear un minijoc per als usuaris quant no hi ha ningu conectat - 
+Temporitzador  - avis de que el servidor estacara en 30segons. 
+S'ha de lliberar la memoria de la structura users al tancar el servidor. 
 
 
 

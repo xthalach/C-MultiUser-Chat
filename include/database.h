@@ -10,9 +10,9 @@
 
 typedef struct {
 
-    int dbLen;
-    int usersLen;
-    char magic[10];
+    int dbLen; // 12 
+    int usersLen; // 10 
+    char magic[10]; 
       
 }db_header_s;
 

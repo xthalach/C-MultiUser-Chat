@@ -30,7 +30,6 @@ int main(){
     fd_set readfd;
 
 
-
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if(sockfd == EXIT_FAILURE){
@@ -99,6 +98,7 @@ int main(){
                     continue;
                 }
                 users[user].fd = clifd;
+                users[user].state = PROTOTEST;
                 strcpy(users[user].username,"Testing\0");
                 if(nfds <= clifd) nfds = clifd + 1;
 
@@ -119,12 +119,17 @@ int main(){
                     cleanUser(&users, i);                   
                     continue;
                 }else{
-                    if(users[i].state == NEW){
+                    if(users[i].state == PROTOTEST){
                         // Chapusa
                         if(checkClientConnection(users[i].fd, users, i) == 1){
                             close(users[i].fd);
                             users[i].fd = -1;
                         }else{
+                            // Login //
+                            // Welcome to the C multichat server
+                            // [1] Login
+                            // [2] Register
+                            // [3] Forgot Account
                             users[i].state = CONNECTED;
                         }
                     }else{
