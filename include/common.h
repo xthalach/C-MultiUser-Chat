@@ -10,26 +10,39 @@
 #define USERNAME_SIZE   25
 #define PASSWORD_SIZE   25
 #define ROL_SIZE        25
-#define MAGIC[8]       "\x78\x54\x68\x61\x6c\x61\x63\x68" // xThalach
+#define MAGIC           "\x78\x54\x68\x61\x6c\x61\x63\x68" // xThalach
 
 // Clients structure 
 typedef enum{
 
+    MENU,
     NEW,
     CONNECTED,
     DISCONECTED,
     PROTOTEST,
-
+    AUTHENTICATED,
+    
+    
 }user_stat_e;
 
+typedef enum {
+    
+    USER,
+    PASSWORD,
+    AUTHNONE,
+
+}user_auth_stat_e;
+
+
 typedef enum{
+
     LOGIN,
     REGISTER,
     FORGOT,
-    USER,
-    PASSWORD,
+    MENUNONE,
+    
+}user_menu_stat_e;
 
-}user_auth_stat_e;
 
 typedef struct{
 
@@ -41,6 +54,8 @@ typedef struct{
     char buff[MAX_BUFF_SIZE];
     int currentChat;
     user_stat_e state;
+    user_menu_stat_e menuState;
+    user_auth_stat_e authState;
     
 }user_data_s;
 

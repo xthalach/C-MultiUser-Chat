@@ -107,6 +107,7 @@ typedef struct{
     
 }proto_data_s; 
 
+// TLV
 void checkServerConnection(int fd){
 
     char buff[MAX_SIZE] = {0};
@@ -176,11 +177,15 @@ int main(){
         }
         
         if(FD_ISSET(fd, &readfd)){
-            if(recv(fd, buff, 1024, MSG_NOSIGNAL) == 0){
+            
+            if(recv(fd, buff, 1024, 0) <= 0){
                 FD_CLR(fd, &readfd);
+                exit(1);
             }
-            printf("socket: %s\n", buff);
+            printf("[->]: %s", buff);
             memset(buff,0,1024);
+            
+
         }
 
         

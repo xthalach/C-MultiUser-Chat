@@ -28,7 +28,7 @@ Hacer como un visual en el terminal para saber con quien estas hablando y quien 
 Crear un minijoc per als usuaris quant no hi ha ningu conectat - 
 Temporitzador  - avis de que el servidor estacara en 30segons. 
 S'ha de lliberar la memoria de la structura users al tancar el servidor. 
-
+Fer un sistema de seguretat per crear backups desde un altre proceses fet copies constants de la memoria del programa principal. 
 
 
 

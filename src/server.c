@@ -15,7 +15,7 @@
 #include "../include/common.h"
 #include "../include/protocol.h"
 #include "../include/database.h"
-#include "../include/database.h"
+
 
 int main(){
 
@@ -40,7 +40,7 @@ int main(){
 
     sockAddress.sin_family = AF_INET;
     //sockAddress.sin_addr.s_addr = INADDR_ANY; // 0.0.0.0
-    sockAddress.sin_addr.s_addr = INADDR_LOOPBACK;
+    sockAddress.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     sockAddress.sin_port = htons(9001); // 5555
 
     if(bind(sockfd, (struct sockaddr *)&sockAddress, sizeof(sockAddress)) == -1){
@@ -58,7 +58,7 @@ int main(){
     
     nfds = sockfd + 1;
 
-    initialize(&users);
+    initialize(users);
     
     while(1){
         FD_ZERO(&readfd);
@@ -86,20 +86,22 @@ int main(){
         if(FD_ISSET(sockfd, &readfd)){
             if((clifd = accept(sockfd, (struct sockaddr *)&clientAddress, &clientAddressLen)) == -1){
                 perror("Accept\n");
-                serverClose(&users, &readfd);
+                serverClose(users, &readfd);
                 close(sockfd);
                 return -1;
             }else{
                 
                 int user;
-                if((user = freeUser(&users ,&readfd)) == -1){
+                if((user = freeUser(users ,&readfd)) == -1){
                     char usersFull[41] = "[!] Not enoght space the users are full!\n";
                     send(clifd, usersFull, strlen(usersFull), SEND_FLAGS_DEFAULT);
                     continue;
                 }
                 users[user].fd = clifd;
                 users[user].state = PROTOTEST;
-                strcpy(users[user].username,"Testing\0");
+                users[user].authState = AUTHNONE;
+                users[user].menuState = MENUNONE;
+                //strcpy(users[user].username,"Testing\0");
                 if(nfds <= clifd) nfds = clifd + 1;
 
                 //handle_client(users[user].fd);
@@ -115,8 +117,10 @@ int main(){
         for(int i = 0; i < MAX_USERS; i++){
             if(users[i].fd != -1 && FD_ISSET(users[i].fd, &readfd)){
                 if(recv(users[i].fd,users[i].buff,MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) <= 0){
+                    // No m'agrada el fet de que quant un usuari tanca la sesio es faci la copia, ja que li dones el poder al usuari per controlar-ho. 
+                    // Molaria mes fer-ho quant el servidor es tanqui o implementar un temporitzador aleatori dintre de un rango de 3h / o cada 6h 
                     saveUsersData(users);
-                    cleanUser(&users, i);                   
+                    cleanUser(users, i);                   
                     continue;
                 }else{
                     if(users[i].state == PROTOTEST){
@@ -125,15 +129,28 @@ int main(){
                             close(users[i].fd);
                             users[i].fd = -1;
                         }else{
-                            // Login //
+                            //  Login
                             // Welcome to the C multichat server
                             // [1] Login
                             // [2] Register
                             // [3] Forgot Account
-                            users[i].state = CONNECTED;
+                            send(users[i].fd,"Login\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",83,MSG_NOSIGNAL);
+                            users[i].state = MENU;
                         }
+                    }else if(users[i].state == MENU){
+                        int menu = atoi(users[i].buff);
+                        
+                        if( menu == LOGIN + 1 || users[i].menuState == LOGIN){
+                            login(users, i);
+                        }else if(menu == REGISTER + 1 || users[i].menuState == REGISTER) {
+                            newUserRegister(users, i);
+                        }else{
+                            send(users[i].fd,"[ERROR] INCORRECT VALUE - USE THE MENU OPCIONS ONLY [ERROR]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",143,MSG_NOSIGNAL);
+                        }
+                        
+
                     }else{
-                        if(send(users[i].currentChat, users[i].buff, MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) == -1){
+                        if(send(users[i].fd, users[i].buff, MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) == -1){
                             fprintf(stderr, "[ERROR] SEND currentChat: %s\n", strerror(errno));
                         }
                         memset(users[i].buff, 0, MAX_BUFF_SIZE); // Clean the user buffer.                         
