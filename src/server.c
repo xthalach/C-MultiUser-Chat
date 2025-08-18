@@ -22,10 +22,17 @@ int main(){
     int sockfd, nfds, clifd; 
     struct sockaddr_in sockAddress = {0}, clientAddress = {0};
     socklen_t clientAddressLen = sizeof(clientAddress);
-
+    db_header_s *db_header = (db_header_s *)calloc(1, sizeof(db_header_s));
+    
     user_data_s *users;
     users = (user_data_s *)calloc(MAX_USERS, sizeof(user_data_s));
+    //importDabase(db_header, users);
 
+    printf("Sizeof users: %ld\n", sizeof(users));
+    listUsers(users);
+    printf("Free");
+    exit(1);
+    
 
     fd_set readfd;
 
@@ -58,6 +65,7 @@ int main(){
     
     nfds = sockfd + 1;
 
+    
     initialize(users);
     
     while(1){
@@ -119,7 +127,8 @@ int main(){
                 if(recv(users[i].fd,users[i].buff,MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) <= 0){
                     // No m'agrada el fet de que quant un usuari tanca la sesio es faci la copia, ja que li dones el poder al usuari per controlar-ho. 
                     // Molaria mes fer-ho quant el servidor es tanqui o implementar un temporitzador aleatori dintre de un rango de 3h / o cada 6h 
-                    saveUsersData(users);
+                    saveUsersData(db_header, users);
+                    //listUsers(users);
                     cleanUser(users, i);                   
                     continue;
                 }else{

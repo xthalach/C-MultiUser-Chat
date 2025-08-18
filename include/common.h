@@ -2,7 +2,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define MAX_USERS        250
+#define MAX_USERS        10
 #define SEND_FLAGS_DEFAULT 0
 #define MAX_BUFF_SIZE   1024
 #define BACKLOG         5

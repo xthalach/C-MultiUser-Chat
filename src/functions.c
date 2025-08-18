@@ -10,7 +10,7 @@
 
 int freeUser(user_data_s *users ,fd_set *readfd){
     for(int i = 0; i < MAX_USERS; i++){
-        if(users[i].fd == -1){
+        if(strcmp(users[i].username, "") == 0){
             FD_SET(users[i].fd, readfd);
             return i;
         }
@@ -21,6 +21,7 @@ int freeUser(user_data_s *users ,fd_set *readfd){
 void initialize(user_data_s *users){
     for(int i = 0; i < MAX_USERS; i++){
         users[i].state = PROTOTEST;
+        //strcpy(users[i].username, "");
         users[i].fd = -1;
     }
     
@@ -41,16 +42,17 @@ void cleanUser(user_data_s *users, int fd){
     users[fd].state = NEW;
 }
 
-
-
-void userRegister(){
-
+void listUsers(user_data_s *users){
+    for(int i = 0; i < MAX_USERS; i++){
+        printf("username: %s\n", users[i].username);
+        printf("password: %s\n", users[i].password);
+        printf("rol: %s\n", users[i].rol);
+        printf("fd: %d\n", users[i].fd);
+        printf("buff: %s\n", users[i].buff);
+        printf("currentChat: %d\n", users[i].currentChat);
+        printf("state: %d\n", users[i].state);
+        printf("menuState: %d\n", users[i].menuState);
+        printf("authState: %d\n\n", users[i].authState);
+    }
 
 }
-
-void userSave(){
-
-}
-
-
-
