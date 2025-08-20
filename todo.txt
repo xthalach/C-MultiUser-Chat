@@ -18,7 +18,9 @@
 # Definir el menu i el protocol de com funcionara el menu 
 # R
 # Funcionalitat per surtir del programa (exit)
-
+# Fer una cache amb els chats dels usuaris que t'estant parlant mentres estas amb una conversa. Fer que el server envie una copia de la estructura 
+del usuari, i comprobar cada vegada que arriben dades el file descriptor i en cas de que el FD sigui de una persona que no es la que parlem, es guarda
+a una cache que despres l'usuari podra consultar. 
 
 // General 
 

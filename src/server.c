@@ -155,13 +155,27 @@ int main(){
                         if( menu == LOGIN + 1 || users[i].menuState == LOGIN){
                             char tmpUser[USERNAME_SIZE];
                             char tmpPass[PASSWORD_SIZE];
-                            login(db_header, users, i, clifd, tmpUser, tmpPass);
+                            if(login(db_header, users, i, clifd, tmpUser, tmpPass) == -1){
+                                send(users[i].fd, "[!] Wrong Username or Password [!]\n[+] Username: \n", 50,MSG_NOSIGNAL);
+                                users[i].menuState = LOGIN;
+                                users[i].authState = USER;
+                            }
                         }else if(menu == REGISTER + 1 || users[i].menuState == REGISTER) {
+                            // Recordar check memoria dinamica
                             newUserRegister(users, i);
                         }else{
                             send(users[i].fd,"[ERROR] INCORRECT VALUE - USE THE MENU OPCIONS ONLY [ERROR]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",143,MSG_NOSIGNAL);
                         }
                         
+
+                    }else if(users[i].state == AUTHENTICATED){
+                        // Welcome nom del usuari
+                        // [1] Edit Username
+                        // [2] Edit Password
+                        // [3] Select User Chat
+                        // [4] Show Waiting Room / Old Messages
+                        // [4] Delete Account
+                        int menu = atoi(users[i].buff);
 
                     }else{
                         if(send(users[i].fd, users[i].buff, MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) == -1){

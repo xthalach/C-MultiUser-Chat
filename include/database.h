@@ -18,7 +18,7 @@ typedef struct {
 
 void importDabase(db_header_s *db_header, user_data_s **users);
 void saveUsersData(db_header_s *db_header, user_data_s *users);
-void login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass);
+int login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass);
 void newUserRegister(user_data_s *users, int i);
 
 

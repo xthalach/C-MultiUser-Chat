@@ -77,7 +77,7 @@ void saveUsersData(db_header_s *db_header, user_data_s *users){
     
 }
 
-void login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass){
+int login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass){
     users[user].menuState = LOGIN;
 
     if(users[user].authState == AUTHNONE){
@@ -101,14 +101,16 @@ void login(db_header_s *db_header,user_data_s *users, int user, int clifd, char 
                     users[i].menuState = 0;
                     users[i].authState = 0; 
                     users[i].state = AUTHENTICATED;
+                    users[user].fd = -1; 
                     strcpy(tmpUser, "");
                     strcpy(tmpPass, "");
                     send(users[i].fd, "[+] Authenticated [+]\n", 22, MSG_NOSIGNAL);
-                    break;
+                    send(users[i].fd, "[+] USER MENU\n[1] List Online Users\n[2] Edit Username\n[3] Edit Password\n[4] Delete Account\n", 91, MSG_NOSIGNAL);
+                    return 1;
                 }
             }
-
         }
+        return -1;
     }
 }
 
