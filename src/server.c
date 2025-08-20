@@ -24,14 +24,17 @@ int main(){
     socklen_t clientAddressLen = sizeof(clientAddress);
     db_header_s *db_header = (db_header_s *)calloc(1, sizeof(db_header_s));
     
+    
     user_data_s *users;
-    users = (user_data_s *)calloc(MAX_USERS, sizeof(user_data_s));
-    //importDabase(db_header, users);
+    printf("users after alloc %p\n", &users);
+    //users = (user_data_s *)calloc(db_header->usersLen, sizeof(user_data_s));
+    importDabase(db_header, &users);
 
-    printf("Sizeof users: %ld\n", sizeof(users));
-    listUsers(users);
-    printf("Free");
-    exit(1);
+    // printf("users before alloc %p\n", &users);
+    
+    // listUsers(users, db_header->usersLen);
+    // printf("Free");
+    // exit(1);
     
 
     fd_set readfd;
@@ -71,15 +74,15 @@ int main(){
     while(1){
         FD_ZERO(&readfd);
         FD_SET(sockfd, &readfd);
-
-        for(int i = 0; i < MAX_USERS; i++){
+        listUsers(users, db_header->usersLen);
+        for(int i = 0; i < db_header->usersLen; i++){
             if(users[i].fd != -1){
                 FD_SET(users[i].fd, &readfd);
             }
         }
 
         // // Reset the nfds variable to reuse the log off file descriptors from clients. This could make that another user gets a used file descriptor
-        // for(int i = 0; i < MAX_USERS; i++){
+        // for(int i = 0; i < db_header->usersLen; i++){
         //     if(users[i].fd != -1){
         //         if(nfds >= users[i].fd) nfds = users[i].fd + 1;
         //     }
@@ -122,7 +125,7 @@ int main(){
         }
 
 
-        for(int i = 0; i < MAX_USERS; i++){
+        for(int i = 0; i < db_header->usersLen; i++){
             if(users[i].fd != -1 && FD_ISSET(users[i].fd, &readfd)){
                 if(recv(users[i].fd,users[i].buff,MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) <= 0){
                     // No m'agrada el fet de que quant un usuari tanca la sesio es faci la copia, ja que li dones el poder al usuari per controlar-ho. 
@@ -150,7 +153,9 @@ int main(){
                         int menu = atoi(users[i].buff);
                         
                         if( menu == LOGIN + 1 || users[i].menuState == LOGIN){
-                            login(users, i);
+                            char tmpUser[USERNAME_SIZE];
+                            char tmpPass[PASSWORD_SIZE];
+                            login(db_header, users, i, clifd, tmpUser, tmpPass);
                         }else if(menu == REGISTER + 1 || users[i].menuState == REGISTER) {
                             newUserRegister(users, i);
                         }else{

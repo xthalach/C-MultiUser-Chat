@@ -13,7 +13,7 @@
 
 #define filename "chat.db"
 
-void importDabase(db_header_s *db_header, user_data_s *users){
+void importDabase(db_header_s *db_header, user_data_s **users){
 
     FILE *database;
     int fd;
@@ -49,11 +49,11 @@ void importDabase(db_header_s *db_header, user_data_s *users){
         exit(1);
     }
     
-    users = (user_data_s *)calloc(db_header->usersLen, sizeof(user_data_s));
-
-    printf("inside - Sizeof users: %ld\n", sizeof(users));
-    fread(users, sizeof(user_data_s),db_header->usersLen, database );
-
+    
+    *users = (user_data_s *)calloc(db_header->usersLen, sizeof(user_data_s));
+    
+    fread(*users, sizeof(user_data_s),db_header->usersLen, database );
+    
     fclose(database);
 
 }
@@ -61,7 +61,6 @@ void importDabase(db_header_s *db_header, user_data_s *users){
 void saveUsersData(db_header_s *db_header, user_data_s *users){
 
     FILE *database; 
-
 
     database = fopen(filename, "wb");
 
@@ -78,9 +77,39 @@ void saveUsersData(db_header_s *db_header, user_data_s *users){
     
 }
 
-void login(user_data_s *users, int i){
-    users[i].menuState = LOGIN;
+void login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass){
+    users[user].menuState = LOGIN;
 
+    if(users[user].authState == AUTHNONE){
+        send(users[user].fd, "[+] Username: \n", 15,MSG_NOSIGNAL);
+        users[user].authState = USER;
+    }else if(users[user].authState == USER){
+        strcpy(tmpUser, users[user].buff);
+        send(users[user].fd, "[+] Password: \n", 15,MSG_NOSIGNAL);
+        users[user].authState = PASSWORD;
+    }else if(users[user].authState == PASSWORD){
+
+        strcpy(tmpPass, users[user].buff);
+        
+        for(int i = 0; i < db_header->usersLen; i++){
+            printf("user: %s\n",tmpUser);
+            if(strcmp(users[i].username, tmpUser) == 0){
+                printf("username ok\n");
+                if(strcmp(users[i].password, tmpPass) == 0){
+                    printf("password ok\n");
+                    users[i].fd = clifd;
+                    users[i].menuState = 0;
+                    users[i].authState = 0; 
+                    users[i].state = AUTHENTICATED;
+                    strcpy(tmpUser, "");
+                    strcpy(tmpPass, "");
+                    send(users[i].fd, "[+] Authenticated [+]\n", 22, MSG_NOSIGNAL);
+                    break;
+                }
+            }
+
+        }
+    }
 }
 
 void newUserRegister(user_data_s *users, int i){

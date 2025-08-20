@@ -21,6 +21,7 @@ int freeUser(user_data_s *users ,fd_set *readfd){
 void initialize(user_data_s *users){
     for(int i = 0; i < MAX_USERS; i++){
         users[i].state = PROTOTEST;
+        users[i].authState = AUTHNONE;
         //strcpy(users[i].username, "");
         users[i].fd = -1;
     }
@@ -42,8 +43,9 @@ void cleanUser(user_data_s *users, int fd){
     users[fd].state = NEW;
 }
 
-void listUsers(user_data_s *users){
-    for(int i = 0; i < MAX_USERS; i++){
+void listUsers(user_data_s *users, int maxUsers){
+    
+    for(int i = 0; i < maxUsers; i++){
         printf("username: %s\n", users[i].username);
         printf("password: %s\n", users[i].password);
         printf("rol: %s\n", users[i].rol);
