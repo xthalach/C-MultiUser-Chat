@@ -20,6 +20,6 @@ void importDabase(db_header_s *db_header, user_data_s **users);
 void saveUsersData(db_header_s *db_header, user_data_s *users);
 int login(db_header_s *db_header,user_data_s *users, int user, int clifd, char *tmpUser, char *tmpPass);
 void newUserRegister(user_data_s *users, int i);
-
+void exitChat(user_data_s *users, int i);
 
 #endif

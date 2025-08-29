@@ -32,8 +32,14 @@ Temporitzador  - avis de que el servidor estacara en 30segons.
 S'ha de lliberar la memoria de la structura users al tancar el servidor. 
 Fer un sistema de seguretat per crear backups desde un altre proceses fet copies constants de la memoria del programa principal. 
 
+- ago 26 2025 / 17:42
+Es cambia el file descriptor cada vegada que t'autentiques aixo pot portar problemes, el file descriptor ha de ser static una vegada el usuari s'autentica. 
 
+Si no existeix la BBDD es crea nova. 
 
+Gestiona les tancades inesperades del client, com ara que tanqui el programa mentre es registra, s'ha de tractar i deixar l'strucutra del client netejada com si no esa fet res, s'ha de fer aixi amb la resta de estats que hi ha al programa.  
+
+Restructura els arxius del programa, al arxiu database.c hi ha funcions com la de loign i register que crec que no tindrien que estar-hi, ja que es poden colocar al arxiu functions.c, dabase.c = parse.c ???? 
 
 
 

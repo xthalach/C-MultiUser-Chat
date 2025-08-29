@@ -8,6 +8,7 @@
 #include <sys/fcntl.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include "../include/common.h"
 #include "../include/database.h"
 
@@ -22,6 +23,11 @@ void importDabase(db_header_s *db_header, user_data_s **users){
 
     database = fopen(filename, "rb");
     
+    if(database == NULL){
+        fprintf(stderr, "[ERROR] DB: %s\n", strerror(errno));
+        exit(1);    
+    }
+
     fd = fileno(database);
 
     fstat(fd, stat);
@@ -55,7 +61,7 @@ void importDabase(db_header_s *db_header, user_data_s **users){
     fread(*users, sizeof(user_data_s),db_header->usersLen, database );
     
     fclose(database);
-
+    
 }
 
 void saveUsersData(db_header_s *db_header, user_data_s *users){
@@ -137,4 +143,16 @@ void newUserRegister(user_data_s *users, int i){
     }
     
     //send(users[i].fd, "Inside register funtion\n", 25, MSG_NOSIGNAL);
+}
+
+void exitChat(user_data_s *users, int i){
+    send(users[i].fd, "[+] See you next time [+]\n", 26, MSG_NOSIGNAL);
+    close(users[i].fd);
+    users[i].fd = -1;
+    memset(users[i].buff, 0, MAX_BUFF_SIZE);
+    users[i].currentChat = 0; // Que pasa si el FD es 0 i el usuari parla? Sortira el misatge per el terminal? 
+    users[i].state = DISCONECTED; 
+    users[i].menuState = MENUNONE;
+    users[i].authState = AUTHNONE;
+    
 }

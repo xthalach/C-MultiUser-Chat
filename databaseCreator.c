@@ -1,6 +1,8 @@
-// common.h
-#ifndef COMMON_H
-#define COMMON_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #define MAX_USERS        10
 #define SEND_FLAGS_DEFAULT 0
@@ -12,7 +14,8 @@
 #define ROL_SIZE        25
 #define MAGIC           "\x78\x54\x68\x61\x6c\x61\x63\x68" // xThalach
 
-// Clients structure 
+#define filename "newChat.db"
+
 typedef enum{
 
     MENU,
@@ -73,4 +76,45 @@ typedef struct{
 }user_data_s;
 
 
-#endif // COMMON_H
+typedef struct {
+
+    int dbLen; // 12 
+    int usersLen; // 10 
+    char magic[8]; 
+      
+}db_header_s;
+
+
+void saveUsersData(db_header_s *db_header, user_data_s *users){
+
+    FILE *database; 
+
+    database = fopen(filename, "wb");
+
+    db_header->dbLen = sizeof(db_header_s) + (sizeof(user_data_s) * MAX_USERS);
+    printf("header len: %d\n", db_header->dbLen); 
+    db_header->usersLen = (sizeof(user_data_s) * MAX_USERS) / sizeof(user_data_s);
+    printf("db users: %d\n", db_header->usersLen);
+    strcpy(db_header->magic, MAGIC);
+
+    fwrite(db_header, sizeof(db_header_s), 1 ,database);
+    fwrite(users, sizeof(user_data_s), MAX_USERS, database);
+
+    fclose(database);
+    
+}
+
+int main(){
+
+
+    db_header_s *db_header; 
+    db_header = (db_header_s *)calloc(1, sizeof(db_header_s));
+
+    user_data_s *users = (user_data_s *)calloc(MAX_USERS, sizeof(user_data_s));
+
+    saveUsersData(db_header, users);
+
+    printf("[!] New Database Created [!]\n");
+
+    return 0; 
+}

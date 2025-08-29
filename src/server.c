@@ -146,12 +146,13 @@ int main(){
                             // [1] Login
                             // [2] Register
                             // [3] Forgot Account
-                            send(users[i].fd,"Login\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",83,MSG_NOSIGNAL);
+                            // [4] Exit
+                            send(users[i].fd,"Login\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n",91,MSG_NOSIGNAL);
                             users[i].state = MENU;
                         }
                     }else if(users[i].state == MENU){
                         int menu = atoi(users[i].buff);
-                        
+                        // El LOGIN + 1 es perque soc del mas de barberans okey?? Li vaig suma 1 perque no cuadraba amb el que l'usuari introduia. 
                         if( menu == LOGIN + 1 || users[i].menuState == LOGIN){
                             char tmpUser[USERNAME_SIZE];
                             char tmpPass[PASSWORD_SIZE];
@@ -163,6 +164,8 @@ int main(){
                         }else if(menu == REGISTER + 1 || users[i].menuState == REGISTER) {
                             // Recordar check memoria dinamica
                             newUserRegister(users, i);
+                        }else if(menu == EXIT + 1|| users[i].menuState == EXIT){
+                            exitChat(users, i);
                         }else{
                             send(users[i].fd,"[ERROR] INCORRECT VALUE - USE THE MENU OPCIONS ONLY [ERROR]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",143,MSG_NOSIGNAL);
                         }
@@ -175,6 +178,7 @@ int main(){
                         // [3] Select User Chat
                         // [4] Show Waiting Room / Old Messages
                         // [4] Delete Account
+                        // [5] Exit
                         int menu = atoi(users[i].buff);
 
                     }else{
