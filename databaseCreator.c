@@ -53,6 +53,7 @@ typedef enum{
 }user_menu_stat_e;
 
 typedef struct {
+    int userID;
     int fd;
     char buff[MAX_BUFF_SIZE];
 } user_missing_chat_s;
@@ -68,7 +69,6 @@ typedef struct{
     char buff[MAX_BUFF_SIZE];
     int currentChat;
     user_missing_chat_s oldChat[MAX_USERS];
-    int oldMsg[MAX_USERS]; 
     user_stat_e state;
     user_menu_stat_e menuState;
     user_auth_stat_e authState;
@@ -92,9 +92,9 @@ void saveUsersData(db_header_s *db_header, user_data_s *users){
     database = fopen(filename, "wb");
 
     db_header->dbLen = sizeof(db_header_s) + (sizeof(user_data_s) * MAX_USERS);
-    printf("header len: %d\n", db_header->dbLen); 
+    //printf("header len: %d\n", db_header->dbLen); 
     db_header->usersLen = (sizeof(user_data_s) * MAX_USERS) / sizeof(user_data_s);
-    printf("db users: %d\n", db_header->usersLen);
+    //printf("db users: %d\n", db_header->usersLen);
     strcpy(db_header->magic, MAGIC);
 
     fwrite(db_header, sizeof(db_header_s), 1 ,database);

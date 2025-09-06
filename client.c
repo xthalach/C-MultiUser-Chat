@@ -180,14 +180,18 @@ int main(){
             
             if(recv(fd, buff, 1024, 0) <= 0){
                 FD_CLR(fd, &readfd);
+                printf("\n[!] Server Closed [!]\n");
                 exit(1);
             }
-            printf("[->]: %s", buff);
+            
+            
+            printf("%s", buff);
+            printf("[->]: ");             // Escriu el prompt després, separat
+            fflush(stdout); 
             memset(buff,0,1024);
             
 
         }
-
         
     }
     close(fd);

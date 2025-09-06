@@ -30,11 +30,7 @@ typedef enum {
     USER,
     PASSWORD,
     AUTHNONE,    
-    EDITUSER,
-    EDITPASS,
-    SELECTCHAT,
-    OLDMSG,
-    DELETEUSER,
+
 
 }user_auth_stat_e;
 
@@ -43,6 +39,12 @@ typedef enum{
 
     LOGIN,
     REGISTER,
+    LISTUSERS,
+    EDITUSER,
+    EDITPASS,
+    SELECTCHAT,
+    OLDMSG,
+    DELETEUSER,
     FORGOT,
     EXIT,
     MENUNONE,
@@ -50,6 +52,7 @@ typedef enum{
 }user_menu_stat_e;
 
 typedef struct {
+    int userID; 
     int fd;
     char buff[MAX_BUFF_SIZE];
 } user_missing_chat_s;
@@ -65,7 +68,6 @@ typedef struct{
     char buff[MAX_BUFF_SIZE];
     int currentChat;
     user_missing_chat_s oldChat[MAX_USERS];
-    int oldMsg[MAX_USERS]; 
     user_stat_e state;
     user_menu_stat_e menuState;
     user_auth_stat_e authState;

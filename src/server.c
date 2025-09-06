@@ -15,7 +15,7 @@
 #include "../include/common.h"
 #include "../include/protocol.h"
 #include "../include/database.h"
-
+#include "../include/menus.h"
 
 int main(){
 
@@ -74,7 +74,9 @@ int main(){
     while(1){
         FD_ZERO(&readfd);
         FD_SET(sockfd, &readfd);
+        
         listUsers(users, db_header->usersLen);
+        
         for(int i = 0; i < db_header->usersLen; i++){
             if(users[i].fd != -1){
                 FD_SET(users[i].fd, &readfd);
@@ -157,9 +159,11 @@ int main(){
                             char tmpUser[USERNAME_SIZE];
                             char tmpPass[PASSWORD_SIZE];
                             if(login(db_header, users, i, clifd, tmpUser, tmpPass) == -1){
-                                send(users[i].fd, "[!] Wrong Username or Password [!]\n[+] Username: \n", 50,MSG_NOSIGNAL);
-                                users[i].menuState = LOGIN;
-                                users[i].authState = USER;
+                                send(users[i].fd, "[!] Wrong Username or Password [!]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n", 1024,MSG_NOSIGNAL);
+                                menu = 0;
+                                users[i].state == MENU;
+                                users[i].menuState = MENUNONE;
+                                users[i].authState = AUTHNONE;
                             }
                         }else if(menu == REGISTER + 1 || users[i].menuState == REGISTER) {
                             // Recordar check memoria dinamica
@@ -169,17 +173,29 @@ int main(){
                         }else{
                             send(users[i].fd,"[ERROR] INCORRECT VALUE - USE THE MENU OPCIONS ONLY [ERROR]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n",143,MSG_NOSIGNAL);
                         }
-                        
 
                     }else if(users[i].state == AUTHENTICATED){
-                        // Welcome nom del usuari
-                        // [1] Edit Username
-                        // [2] Edit Password
-                        // [3] Select User Chat
-                        // [4] Show Waiting Room / Old Messages
-                        // [4] Delete Account
-                        // [5] Exit
-                        int menu = atoi(users[i].buff);
+                        // [1] List Online Users\n[2] Edit Username\n[3] Edit Password\n[4] Select User Chat\n[5] Show Waiting Room\n[6] Delete Account\n[7] Log Off\n
+                        // Welcome nom del usuari <- En algun futur
+                        // [1] List Online Users
+                        // [2] Edit Username
+                        // [3] Edit Password
+                        // [4] Select User Chat
+                        // [5] Show Waiting Room / Old Messages
+                        // [6] Delete Account
+                        // [7] Log Off
+                        int menu = 0;
+                        users[i].menuState = MENUNONE;
+                        users[i].authState = AUTHNONE;
+                        menu = atoi(users[i].buff);
+
+                        if(menu == LISTUSERS - 1 || users[i].menuState == LISTUSERS){
+                            send(users[i].fd, "[+] Inside List Users \n", 24, MSG_NOSIGNAL);
+                            listOnlineUsers(users, db_header->usersLen, i);                            
+                        }else if(menu == EDITUSER - 1 || users[i].menuState == EDITUSER){
+                            send(users[i].fd, "[+] Inside Edit Username \n", 27, MSG_NOSIGNAL);
+                        }
+
 
                     }else{
                         if(send(users[i].fd, users[i].buff, MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) == -1){

@@ -23,11 +23,13 @@ void initialize(user_data_s *users){
         users[i].state = PROTOTEST;
         users[i].authState = AUTHNONE;
         //strcpy(users[i].username, "");
+        users[i].id = i;
         users[i].fd = -1;
     }
     
 }
 
+// aixo no se si funciona. 
 void serverClose(user_data_s *users, fd_set *readfd){
     char closeMessage[19] = "[!] Server closed!\n";
     for(int i = 0; i < MAX_USERS; i++){
@@ -46,6 +48,7 @@ void cleanUser(user_data_s *users, int fd){
 void listUsers(user_data_s *users, int maxUsers){
     
     for(int i = 0; i < maxUsers; i++){
+        printf("ID %d\n", users[i].id);
         printf("username: %s\n", users[i].username);
         printf("password: %s\n", users[i].password);
         printf("rol: %s\n", users[i].rol);

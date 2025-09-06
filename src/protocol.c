@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#include "../include/functions.h"
+// #include "../include/functions.h"
 #include "../include/common.h"
 
 // TCP Protocol - A protocol to check if the user is using the legitim client aplicaction. 

@@ -39,13 +39,25 @@ Si no existeix la BBDD es crea nova.
 
 Gestiona les tancades inesperades del client, com ara que tanqui el programa mentre es registra, s'ha de tractar i deixar l'strucutra del client netejada com si no esa fet res, s'ha de fer aixi amb la resta de estats que hi ha al programa.  
 
-Restructura els arxius del programa, al arxiu database.c hi ha funcions com la de loign i register que crec que no tindrien que estar-hi, ja que es poden colocar al arxiu functions.c, dabase.c = parse.c ???? 
+*** Restructura els arxius del programa, al arxiu database.c hi ha funcions com la de loign i register que crec que no tindrien que estar-hi, ja que es poden colocar al arxiu functions.c, dabase.c = parse.c ???? *** 
+
+- sep 2 18:04 
+
+Una vegada es falla l'autenticacio es torna al menu inicial. 
+
+- sep 6 21:40 
 
 
+Si el client/usuari, tanca sesio a mintan registre s'ha de wipejar el usuari que ha alterat. \
 
+El arxiu functions.c es una mica ambiguo ja que les funcions son un pupurri. 
 
+Es poden crear usuaris amb el mateix nom i contrasenya, es poden diferencia per el id, pero igual el nom tindria que ser unic tambe {
+    a l'hora de fer el registre s'ha de validar si el usuari ja existeix, i per evitar la enumeracio masiva de usuaris es fa una funcio
+    per limitar els intents de registre a 5, despres de 5 intents es tira fora al client. 
+}
 
-
+falta debug a la funcio de listOnlineUsers no funciona correctament. 
 
 
 
