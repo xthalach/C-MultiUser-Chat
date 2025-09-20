@@ -39,6 +39,7 @@ typedef enum{
 
     LOGIN,
     REGISTER,
+    USERDETAILS,
     LISTUSERS,
     EDITUSER,
     EDITPASS,

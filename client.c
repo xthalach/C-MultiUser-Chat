@@ -170,7 +170,7 @@ int main(){
             
             if(len > 0){
                 buff[len] = '\0';
-                send(fd, buff, sizeof(buff), MSG_NOSIGNAL);
+                send(fd, buff, strlen(buff), MSG_NOSIGNAL);
                 memset(buff,0,1024);
             }
             
@@ -184,14 +184,24 @@ int main(){
                 exit(1);
             }
             
-            
-            printf("%s", buff);
-            printf("[->]: ");             // Escriu el prompt després, separat
-            fflush(stdout); 
-            memset(buff,0,1024);
+            int printable = 0;
+            for(int i = 0; i < 1024; i++){
+                if(buff[i] == '\0' || buff[i] == '\n'){
+                    printable = 1;
+                    break;
+                }
+            }
+            if(printable == 1){
+                printf("%s", buff);
+                printf("[->]: ");             // Escriu el prompt després, separat
+                fflush(stdout);
+                memset(buff,0,1024);
+            }
+
             
 
         }
+ 
         
     }
     close(fd);

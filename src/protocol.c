@@ -46,13 +46,13 @@ int checkClientConnection(int fd, user_data_s *user, int i){
     int value = ntohl(*data);
 
     if(type == TCP){
-        if(send(fd, "[!] Good Protocol Type\n", strlen("[!] Good Protocol Type\n"), MSG_NOSIGNAL) == EXIT_ERROR){
+        if(send(fd, "[!] Good Protocol Type\n", strlen("[!] Good Protocol Type\n"), MSG_MORE) == EXIT_ERROR){
             fprintf(stderr, "[ERROR] send type: %s\n",strerror(errno));
             return EXIT_FAILURE;
         }
     }else {
         
-        if(send(fd, "[!] Wrong Protocol, Closing Connection\n", strlen("[!] Wrong Protocol, Closing Connection\n"), MSG_NOSIGNAL) == EXIT_ERROR){
+        if(send(fd, "[!] Wrong Protocol, Closing Connection\n", strlen("[!] Wrong Protocol, Closing Connection\n"), MSG_MORE) == EXIT_ERROR){
             fprintf(stderr, "[ERROR] send error type: %s\n",strerror(errno));
             return EXIT_FAILURE;
         }
@@ -60,12 +60,12 @@ int checkClientConnection(int fd, user_data_s *user, int i){
     }
 
     if(len == sizeof(proto_data_s) + sizeof(int)){
-        if(send(fd, "[!] Good Size\n", strlen("[!] Good Size\n"), MSG_NOSIGNAL) == EXIT_ERROR){
+        if(send(fd, "[!] Good Size\n", strlen("[!] Good Size\n"), MSG_MORE) == EXIT_ERROR){
             fprintf(stderr, "[ERROR] send len: %s\n", strerror(errno));
             return EXIT_FAILURE;
         }
     }else {
-        if(send(fd, "[!] Wrong Size, Closing Connection\n", strlen("[!] Wrong Size, Closing Connection\n"), MSG_NOSIGNAL) == EXIT_ERROR){
+        if(send(fd, "[!] Wrong Size, Closing Connection\n", strlen("[!] Wrong Size, Closing Connection\n"), MSG_MORE) == EXIT_ERROR){
             fprintf(stderr, "[ERROR] send error len: %s\n", strerror(errno));
 
         }
@@ -73,7 +73,7 @@ int checkClientConnection(int fd, user_data_s *user, int i){
     }
 
     if(value == 1){
-        if(send(fd, "[!] Good Data Value\n", strlen("[!] Good Data Value\n"), MSG_NOSIGNAL) == EXIT_ERROR){
+        if(send(fd, "[!] Good Data Value\n", strlen("[!] Good Data Value\n"), MSG_MORE) == EXIT_ERROR){
             fprintf(stderr, "[ERROR] send value: %s\n", strerror(errno));
             return EXIT_FAILURE;
         }

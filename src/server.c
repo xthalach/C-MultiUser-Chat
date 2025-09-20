@@ -149,7 +149,7 @@ int main(){
                             // [2] Register
                             // [3] Forgot Account
                             // [4] Exit
-                            send(users[i].fd,"Login\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n",91,MSG_NOSIGNAL);
+                            send(users[i].fd,"Login\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n",91,MSG_FIN);
                             users[i].state = MENU;
                         }
                     }else if(users[i].state == MENU){
@@ -159,7 +159,7 @@ int main(){
                             char tmpUser[USERNAME_SIZE];
                             char tmpPass[PASSWORD_SIZE];
                             if(login(db_header, users, i, clifd, tmpUser, tmpPass) == -1){
-                                send(users[i].fd, "[!] Wrong Username or Password [!]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n", 1024,MSG_NOSIGNAL);
+                                send(users[i].fd, "[!] Wrong Username or Password [!]\nLogin\nWelcome to the C multichat server\n[1] Login\n[2] Register\n[3] Forgot Account\n[4] Exit\n", 130,MSG_NOSIGNAL);
                                 menu = 0;
                                 users[i].state == MENU;
                                 users[i].menuState = MENUNONE;
@@ -177,28 +177,34 @@ int main(){
                     }else if(users[i].state == AUTHENTICATED){
                         // [1] List Online Users\n[2] Edit Username\n[3] Edit Password\n[4] Select User Chat\n[5] Show Waiting Room\n[6] Delete Account\n[7] Log Off\n
                         // Welcome nom del usuari <- En algun futur
-                        // [1] List Online Users
-                        // [2] Edit Username
-                        // [3] Edit Password
-                        // [4] Select User Chat
-                        // [5] Show Waiting Room / Old Messages
-                        // [6] Delete Account
-                        // [7] Log Off
+                        // [1] User Details
+                        // [2] List Online Users
+                        // [3] Edit Username
+                        // [4] Edit Password
+                        // [5] Select User Chat
+                        // [6] Show Waiting Room / Old Messages
+                        // [7] Delete Account
+                        // [8] Log Off
                         int menu = 0;
                         users[i].menuState = MENUNONE;
                         users[i].authState = AUTHNONE;
                         menu = atoi(users[i].buff);
-
-                        if(menu == LISTUSERS - 1 || users[i].menuState == LISTUSERS){
-                            send(users[i].fd, "[+] Inside List Users \n", 24, MSG_NOSIGNAL);
+                        
+                        if( menu == USERDETAILS -1 || users[i].menuState == USERDETAILS){
+                            send(users[i].fd, "[+] Inside User Details \n\n", 26, MSG_MORE);
+                            userdetails(users, db_header->usersLen, i);
+                        }else if(menu == LISTUSERS - 1 || users[i].menuState == LISTUSERS){
+                            send(users[i].fd, "[+] Inside List Users \n\n", 24, MSG_MORE);
                             listOnlineUsers(users, db_header->usersLen, i);                            
                         }else if(menu == EDITUSER - 1 || users[i].menuState == EDITUSER){
-                            send(users[i].fd, "[+] Inside Edit Username \n", 27, MSG_NOSIGNAL);
+                            send(users[i].fd, "[+] Inside Edit Username \n\n", 26, MSG_NOSIGNAL);
+                        }else{
+                            send(users[i].fd,"[ERROR] INCORRECT VALUE - USE THE MENU OPCIONS ONLY [ERROR]\n[+] USER MENU\n[1] List Online Users\n[2] Edit Username\n[3] Edit Password\n[4] Select User Chat\n[5] Show Waiting Room\n[6] Delete Account\n[7] Log Off\n",206,MSG_NOSIGNAL);
                         }
 
 
                     }else{
-                        if(send(users[i].fd, users[i].buff, MAX_BUFF_SIZE, SEND_FLAGS_DEFAULT) == -1){
+                        if(send(users[i].fd, users[i].buff, strlen(users[i].buff), SEND_FLAGS_DEFAULT) == -1){
                             fprintf(stderr, "[ERROR] SEND currentChat: %s\n", strerror(errno));
                         }
                         memset(users[i].buff, 0, MAX_BUFF_SIZE); // Clean the user buffer.                         

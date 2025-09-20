@@ -59,6 +59,12 @@ Es poden crear usuaris amb el mateix nom i contrasenya, es poden diferencia per 
 
 falta debug a la funcio de listOnlineUsers no funciona correctament. 
 
+- sep 13 10:56 
+
+El problema de que hi ha dos prompts es de que: 
+
+    Protocol Issue: The server is sending an extra packet with only null bytes, possibly caused by always sending buffers of fixed size (1024) and not trimming to only valid data.
+
 
 
 
